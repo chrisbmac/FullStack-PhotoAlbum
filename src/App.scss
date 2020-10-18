@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css?family=Griffy");
+
+$device: "screen and (max-width:700px)";
+$header-text-color:#b82308;
+$text-color:#545454;
+$base-font-size:14px;
+$deviceS: "screen and (max-width:320px)";
+// -------------------------------------------- mixins for vendor-prefixes
+@mixin flex-display() {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+.seperator {
+	
+	width: 80%;
+	height: 2px;
+	background-color: rgba(0, 0, 0, 0.267);
+	border-radius: 25px;
+    margin: 20px;
+    margin-left: -5px;
+	
+}
+html {
+    height:100%;
+}
+
+body {
+    padding:0;
+    margin:0;
+    margin-left:15px;
+    height:100%;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    background: #a1adbb;
+    color:white;
+    @media #{$device}{
+        background: rgba(128, 128, 128, 0.596);
+    }
+    @media #{$deviceS}{
+        background: rgba(54, 49, 49, 0.596);
+    }
+}
+
+.main{
+
+    &__counter{
+        background-color: black;
+        margin-bottom: 10px;
+    }
+    &__main__NextPrevImgDis{
+        display:flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+
+    }
+    &__oneImage{
+        width: 80%;
+        max-width: 400px;
+        display:none;
+    }
+    &__image{
+        width: 80%;
+        max-width: 400px;
+        height: auto;
+        padding:1px;
+        border:1px solid #021a40;
+        background-color:rgb(255, 255, 255);
+    }
+
+    &__imgTitle{
+        text-decoration: underline;
+        font-weight: bold;
+    }
+
+    &__imgDesc{
+        font-size: small;
+    }
+
+    &__comments{
+        flex-wrap: wrap;
+        overflow-wrap: break-word;
+    }
+}
+
+
+.focusImages{
+    display:flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display:none;
+}
+
+.commentPan{
+    display: none;
+}
+.loading-overlay {
+    position: fixed;
+    z-index: 999;
+    left:0px;
+    top:0px;
+    right:0px;
+    bottom:0px;
+    overflow: show;
+    margin: auto;
+    background-color: cadetblue;
+    display:none;
+}

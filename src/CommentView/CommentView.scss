@@ -1,0 +1,61 @@
+@import url("https://fonts.googleapis.com/css?family=Griffy");
+
+$device: "screen and (max-width:700px)";
+$header-text-color:#b82308;
+$text-color:#545454;
+$base-font-size:14px;
+
+// -------------------------------------------- mixins for vendor-prefixes
+@mixin flex-display() {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.commentPan{
+    display:flex;
+    flex-direction: column;
+    display: none;
+
+    &__buttons{
+        display: flex;
+        flex-direction: row;
+    }
+
+    &__Author{
+        margin-right: 25%;
+        box-shadow: 0 0 10px rgb(61, 61, 61);
+        max-width: 200px;
+    }
+
+    &__Comment{
+        margin-right: 20%;
+        box-shadow: 0 0 10px rgb(61, 61, 61);
+        min-height: 150px;
+        max-height: 250px;
+        max-width: 400px;
+    }
+}
+
+.imageHover{
+    //width: 10%;
+    max-width: 50px;
+    height: 50px;
+    padding:1px;
+    border-radius: 8px;
+    margin-right: 2px;
+    margin-left: 2px;
+    margin-bottom: 2px;
+    flex-shrink: 4;
+    flex-grow: 4;
+}
+.imageHover:hover{
+    -moz-box-shadow: 0 0 10px #ccc;
+    -webkit-box-shadow: 0 0 10px #ccc;
+    box-shadow: 0 0 10px rgb(61, 61, 61);
+    width: 9%;
+    max-width: 45px;
+    height: 45px;
+      
+}
