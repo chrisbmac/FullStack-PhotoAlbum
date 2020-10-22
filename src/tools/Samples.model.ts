@@ -48,5 +48,6 @@ export interface SendComments {
     comments: Comments[];
     getJSONData: Function;
     visible: boolean;
-    
+    history: any;
+    route: string;
 }

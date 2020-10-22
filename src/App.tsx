@@ -76,23 +76,6 @@ const App = ():JSX.Element => {
 
   const history:any = useHistory();
   const route:string = useLocation().pathname;
-  
-
-/*const ImageClicked = (e:any): void =>{
-  console.log("OKOKOKOKTHE IMAGE WAS CLICKED");
-   <div className="focusImages">
-         {photos.map((data:Photo,n:number):JSX.Element =>{
-           return (
-
-             <button key={n} style={{background:'none', border:'none'}} onClick={imageClick(n)} value={n}>
-              <img src={"./Images/" + data.source} alt="asd" className="imageHover"/>
-             </button>
-
-           );
-         })}
-      </div>
-
-}*/
 
   return (
     
@@ -135,7 +118,7 @@ const App = ():JSX.Element => {
               <FocusView photos={photos} visible={false} setCount={setCount}></FocusView>
               <CommentView photos ={photos} visible={false} count={count}
                 comments={photos[count].comments} setPhotos={setPhotos}
-                  getJSONData={getJSONData} ></CommentView>
+                  getJSONData={getJSONData} history={history} route={route}></CommentView>
               
             </React.Fragment>
           } />
@@ -146,7 +129,7 @@ const App = ():JSX.Element => {
               <FocusView photos={photos} visible={true} setCount={setCount}></FocusView>
               <CommentView photos ={photos} visible={false} count={count}
                 comments={photos[count].comments} setPhotos={setPhotos}
-                  getJSONData={getJSONData} ></CommentView>
+                  getJSONData={getJSONData} history={history} route={route} ></CommentView>
             </React.Fragment>
           } />
 
@@ -154,7 +137,7 @@ const App = ():JSX.Element => {
               <React.Fragment>
               <CommentView photos ={photos} visible={true} count={count}
                 comments={photos[count].comments} setPhotos={setPhotos}
-                  getJSONData={getJSONData}></CommentView>
+                  getJSONData={getJSONData} history={history} route={route}></CommentView>
               <FocusView photos={photos} visible={false} setCount={setCount} ></FocusView>
             </React.Fragment>
           } />

@@ -7,10 +7,10 @@ import ScrollView from '../ScrollImages/ScrollView';
 
 const SUBMIT_COMMENT = "https://www.seanmorrow.ca/_lessons/albumAddComment.php?id=w0436519";
 const RETRIEVE_SCRIPT:string = "https://www.seanmorrow.ca/_lessons/albumRetrieve.php?id=w0436519&count=11";
-const CommentView = ({photos,visible, count, comments, getJSONData, setPhotos}:SendComments):JSX.Element => {
+const CommentView = ({photos,visible, count, comments, getJSONData, setPhotos, history, route}:SendComments):JSX.Element => {
 
 let sendString: any;
-const commentSubmit = (e:any):void => {
+const commentSubmit = ():void => {
   setPanelState(false);
   sendString = {
       "photoId": photos[count].id,
@@ -45,9 +45,9 @@ const onError = (message:string):void => {
     setCommentLoading(true);
     console.log("*** Error has occured during AJAX data transmission: " + message)};
 
-const commentCancel = (e:any):void => {
+const commentCancel = ():void => {
   setPanelState(false);
-  console.log("CANCEL BUTTON HAS BEEN CLICKed!!!");
+
 }
     return (
       <div>
@@ -60,8 +60,10 @@ const commentCancel = (e:any):void => {
             <p>Comment: </p>
             <textarea id="commentTxtArea" className="commentPan__Comment" onChange={userComment}></textarea>
           <div className="commentPan__buttons">
-                <button disabled ={(stateAuthor === "") || (stateComment === "")}id="submitComment" className="buttons__sendComment" onClick = {commentSubmit}>Send Comment</button>
-                <button id="btnCancelComment" className="buttons__cancelComment" onClick = {commentCancel}>Cancel</button>
+                <button disabled ={(stateAuthor === "") || (stateComment === "")}id="submitComment" className="buttons__sendComment" 
+                  onClick={ () => {history.push("/"); commentSubmit();}}>Send Comment</button>
+                <button id="btnCancelComment" className="buttons__cancelComment"
+                  onClick={ () => {history.push("/"); commentCancel();}}>Cancel</button>
           </div>
         </div>
         
