@@ -18,8 +18,9 @@ const App = ():JSX.Element => {
   
   const onResponse = (result:PhotosData):void => {
     setPhotos(result.photos);
-    //console.log(result);
-    //console.log(photos);
+    console.log(result);
+    console.log(photos);
+    console.log("FROM APP VIEW");
     setLoading(false);
     
   }
@@ -132,8 +133,10 @@ const App = ():JSX.Element => {
           <Route path="/"exact render={():JSX.Element =>
             <React.Fragment>
               <FocusView photos={photos} visible={false} setCount={setCount}></FocusView>
-              <CommentView photos ={photos} visible={false} setCount={setCount}></CommentView>
-              {nextBtn}
+              <CommentView photos ={photos} visible={false} count={count}
+                comments={photos[count].comments} setPhotos={setPhotos}
+                  getJSONData={getJSONData} ></CommentView>
+              
             </React.Fragment>
           } />
             
@@ -141,14 +144,18 @@ const App = ():JSX.Element => {
             <React.Fragment>
               
               <FocusView photos={photos} visible={true} setCount={setCount}></FocusView>
-              <CommentView photos ={photos} visible={false} setCount={setCount}></CommentView>
+              <CommentView photos ={photos} visible={false} count={count}
+                comments={photos[count].comments} setPhotos={setPhotos}
+                  getJSONData={getJSONData} ></CommentView>
             </React.Fragment>
           } />
 
             <Route path="/CommentView" render={():JSX.Element =>
               <React.Fragment>
-              <CommentView photos ={photos} visible={true} setCount={setCount}></CommentView>
-              <FocusView photos={photos} visible={false} setCount={setCount}></FocusView>
+              <CommentView photos ={photos} visible={true} count={count}
+                comments={photos[count].comments} setPhotos={setPhotos}
+                  getJSONData={getJSONData}></CommentView>
+              <FocusView photos={photos} visible={false} setCount={setCount} ></FocusView>
             </React.Fragment>
           } />
 

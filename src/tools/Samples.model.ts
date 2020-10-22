@@ -37,3 +37,16 @@ export interface ImageClicked {
     visible: boolean;
 }
 
+export interface Count {
+    setCount: Function;
+}
+
+export interface SendComments {
+    count: number;
+    photos: Photo[];
+    setPhotos: Function;
+    comments: Comments[];
+    getJSONData: Function;
+    visible: boolean;
+    
+}
