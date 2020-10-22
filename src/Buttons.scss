@@ -1,0 +1,116 @@
+@import url("https://fonts.googleapis.com/css?family=Griffy");
+
+$device: "screen and (max-width:320px)";
+$header-text-color:#b82308;
+$text-color:#545454;
+$base-font-size:14px;
+
+@mixin flex-display() {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.buttons{
+    display:flex;
+    flex-direction: row;
+    @media #{$device}{
+        flex-direction: column;
+        width:150px;
+    }
+    &__openAlbum {
+        box-shadow: grey;
+        background: white;
+        display: none;
+        &:hover {
+            border-radius: 25px;
+            background: rgba(1, 1, 255, 0.733);
+            color: white;
+            cursor: pointer;
+        }
+    }
+    &__scrollNext{
+        box-shadow: grey;
+        background: white;
+        border-color:rgba(1, 1, 255, 0.733);
+        border-radius: 5px;
+        //display: none;
+        &:hover {
+            border-radius: 25px;
+            background: rgba(1, 1, 255, 0.733);
+            color: white;
+		    cursor: pointer;
+        }
+    }
+
+    &__scrollPrev{
+        box-shadow: grey;
+        background: white;
+        border-color: rgba(48, 167, 1, 0.753);
+        border-radius: 5px;
+        //display: none;
+        &:hover {
+            border-radius: 25px;
+            background: rgba(48, 167, 1, 0.753);
+            color: white;
+		    cursor: pointer;
+        }
+    }
+
+    &__focus{
+        box-shadow: grey;
+        background: rgb(245, 184, 114);
+        border-color:rgb(255, 115, 1);
+        border-radius: 5px;
+        //display: none;
+        &:hover{
+            border-radius: 25px;
+            background: rgb(255, 115, 1);
+            color: white;
+            cursor: pointer;
+        }
+    }
+    &__comment{
+        box-shadow: grey;
+        background: rgb(224, 202, 74);
+        //display: none;
+        border-color:rgb(255, 217, 1);
+        border-radius: 5px;
+        &:hover{
+            border-radius: 25px;
+            background: rgb(255, 217, 1);
+            color: white;
+            cursor: pointer;
+        }
+    }
+    &__sendComment{
+        box-shadow: grey;
+        background: white;
+        margin-right: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        &:hover{
+            border-radius: 25px;
+            background: rgba(255, 217, 1, 0.733);
+            color: white;
+            cursor: pointer;
+        }
+    }
+
+
+    &__cancelComment{
+        box-shadow: grey;
+        background: white;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        &:hover{
+            border-radius: 25px;
+            background: rgba(255, 217, 1, 0.733);
+            color: white;
+            cursor: pointer;
+        }
+    }
+}

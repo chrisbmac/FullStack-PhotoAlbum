@@ -1,66 +1,167 @@
 import React from 'react';
-import logo from './logo.svg';
+
 import './App.scss';
 import './Buttons.scss';
 import LoadingOverlay from "./LoadingOverlay/LoadingOverlay";
 import { getJSONData } from "./tools/Toolkit";
-import {PhotosData, Photo} from "./tools/Samples.model";
+import { PhotosData, Photo, ImageClicked } from './tools/Samples.model';
 import CommentView from "./CommentView/CommentView";
 import FocusView from './FocusView/FocusView';
+import ScrollView from './ScrollImages/ScrollView';
+import { Route, Switch } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+
 const SUBMIT_COMMENT:string = "https://www.seanmorrow.ca/_lessons/albumAddComment.php?id=w0436519";
 const RETRIEVE_SCRIPT:string = "https://www.seanmorrow.ca/_lessons/albumRetrieve.php?id=w0436519&count=11";
 
 const App = ():JSX.Element => {
-
+  
   const onResponse = (result:PhotosData):void => {
     setPhotos(result.photos);
-    console.log(result);
+    //console.log(result);
     //console.log(photos);
     setLoading(false);
     
   }
-  const onError = (message:string):void => console.log("*** Error has occured during AJAX data transmission: " + message);
+  const onError = (message:string):void => {
+    setLoading(true);
+    console.log("*** Error has occured during AJAX data transmission: " + message)};
 
   const [loading, setLoading] = React.useState<boolean>(true);
   const [photos, setPhotos] = React.useState<Photo[]>([]);
-
+  const [count, setCount] = React.useState<number>(0);
+  //console.log("DEFAULT COUNT" + count);
   React.useEffect(():void => {
-    // component mounted - loading JSON data when root component mounts
+    
     getJSONData(RETRIEVE_SCRIPT, onResponse, onError);
   }, []);
-  console.log(photos);
+  //console.log(photos);
 
+  /*const nextBtn = (e:any):void => {
+    let x:number = 0;
+    x = count;
+    ++x;
+    console.log("***********   NEXT BUTTON WAS CLICKED" + " " + count);
+    setCount(x);
+  }*/
+
+  /*const prevBtn = (e:any):void => {
+    let n:number = 0;
+    n = count;
+    --n;
+    console.log("***********   PREVIOUS BUTTON WAS CLICKED" + " " + count);
+    setCount(n);
+  }*/
+
+  function nextBtn(){
+    let x:number = 0;
+    x = count;
+    ++x;
+    console.log("***********   NEXT BUTTON WAS CLICKED" + " " + count);
+    setCount(x);
+  }
+
+  function prevBtn() {
+    let n:number = 0;
+    n = count;
+    --n;
+    console.log("***********   PREVIOUS BUTTON WAS CLICKED" + " " + count);
+    setCount(n);
+  }
+
+  const focusBtn = (e:any):void => {
+
+  }
+
+  const history:any = useHistory();
+  const route:string = useLocation().pathname;
+  
+
+/*const ImageClicked = (e:any): void =>{
+  console.log("OKOKOKOKTHE IMAGE WAS CLICKED");
+   <div className="focusImages">
+         {photos.map((data:Photo,n:number):JSX.Element =>{
+           return (
+
+             <button key={n} style={{background:'none', border:'none'}} onClick={imageClick(n)} value={n}>
+              <img src={"./Images/" + data.source} alt="asd" className="imageHover"/>
+             </button>
+
+           );
+         })}
+      </div>
+
+}*/
 
   return (
-    <div className="App">
+    
+    <div>
       <LoadingOverlay bgColor="#035074" spinnerColor="#FFFFFF" enabled={loading} />
+      {photos.length===0
+        ? <span>No orders retrieved...</span>
+          
+        :
+
+        <div>
+      
         <div className="main"></div>
-        <div id="photoCounter" className="main__counter"></div>
+        <div id="photoCounter" className="main__counter">Photos: {count + 1} of {photos.length}</div>
         
-        <div className="buttons">    
+        <div className="buttons">
+              
             <button id="open" className="buttons__openAlbum">Open Album</button>
-            <button id="btnNext" className="buttons__scroll">Next</button>
-            <button id="btnPrevious" className="buttons__scroll">Previous</button>
-            <button id="btnFocus" className="buttons__focus">Focus</button>
-            <button id ="openCommentSection" className="buttons__comment">Comment</button>
+
+            <button disabled={(count + 1) == photos.length}id="btnNext" className="buttons__scrollNext" 
+              onClick={() => { history.push("/");
+                nextBtn();}}>Next</button>
+          
+            <button disabled={count==0} id="btnPrevious" className="buttons__scrollPrev"
+              onClick={() => { history.push("/");
+                prevBtn();}}>Previous</button>
+            
+            <button id="btnFocus" className="buttons__focus" 
+              onClick={ () => history.push("/FocusView")}>Focus</button>
+
+            <button id ="openCommentSection" className="buttons__comment"
+              onClick={ () => history.push("/CommentView")}>Comment</button>
         </div>
 
         <div className="seperator"></div>
-        <div id="showImages" className="focusImages"></div>
-        <FocusView photos={photos}></FocusView>
-        <CommentView></CommentView>
-        <div id="nextPrev_Images" className="main__NextPrevImgDis">
-            <div id="scrollImages" className="main__oneImage">
+        <Switch>
+          
+          <Route path="/"exact render={():JSX.Element =>
+            <React.Fragment>
+              <FocusView photos={photos} visible={false} setCount={setCount}></FocusView>
+              <CommentView photos ={photos} visible={false} setCount={setCount}></CommentView>
+              {nextBtn}
+            </React.Fragment>
+          } />
             
-                <img src="" id="imgscrollTesting" className="main__image"></img>
-                <p id="imgTitle" className="main__imgTitle"></p>
-                <p id="imgDescription" className="main__imgDesc"></p>
-                <div className="seperator"></div>
-                <div id="commentDisplay" className="main__comments">Comment gets Displayed here</div>
-                
-            </div>
-        </div>
+            <Route path="/FocusView" render={():JSX.Element =>
+            <React.Fragment>
+              
+              <FocusView photos={photos} visible={true} setCount={setCount}></FocusView>
+              <CommentView photos ={photos} visible={false} setCount={setCount}></CommentView>
+            </React.Fragment>
+          } />
+
+            <Route path="/CommentView" render={():JSX.Element =>
+              <React.Fragment>
+              <CommentView photos ={photos} visible={true} setCount={setCount}></CommentView>
+              <FocusView photos={photos} visible={false} setCount={setCount}></FocusView>
+            </React.Fragment>
+          } />
+
+        </Switch>
+        
+        <ScrollView caption={photos[count].caption} comments={photos[count].comments} id={photos[count].id} title={photos[count].title} source={photos[count].source}></ScrollView>
+       
+
+
+
+
     </div>
+}</div>
   );
 }
 

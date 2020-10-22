@@ -1,0 +1,45 @@
+.main{
+
+    &__counter{
+        background-color: black;
+        margin-bottom: 10px;
+    }
+    &__main__NextPrevImgDis{
+        display:flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+
+    }
+    &__oneImage{
+        width: 80%;
+        max-width: 400px;
+        border-radius: 5px;
+        
+    }
+    &__image{
+        width: 80%;
+        max-width: 400px;
+        height: auto;
+        padding:1px;
+        border:1px solid #021a40;
+        background-color:rgb(255, 255, 255);
+        border-radius: 5px;
+        -moz-box-shadow: 0 0 15px #ccc;
+        -webkit-box-shadow: 0 0 20px #ccc;
+        box-shadow: 0 0 20px rgb(15, 15, 15);
+    }
+
+    &__imgTitle{
+        text-decoration: underline;
+        font-weight: bold;
+    }
+
+    &__imgDesc{
+        font-size: small;
+    }
+
+    &__comments{
+        flex-wrap: wrap;
+        overflow-wrap: break-word;
+    }
+}

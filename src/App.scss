@@ -20,6 +20,9 @@ $deviceS: "screen and (max-width:320px)";
 	border-radius: 25px;
     margin: 20px;
     margin-left: -5px;
+    -moz-box-shadow: 0 0 10px #ccc;
+    -webkit-box-shadow: 0 0 10px #ccc;
+    box-shadow: 0 0 10px rgb(54, 54, 54);
 	
 }
 html {
@@ -58,7 +61,7 @@ body {
     &__oneImage{
         width: 80%;
         max-width: 400px;
-        display:none;
+        
     }
     &__image{
         width: 80%;
