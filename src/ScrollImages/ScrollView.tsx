@@ -24,8 +24,8 @@ const ScrollView = ({caption, comments, id, source, title }:Photo):JSX.Element =
                     <div className="seperator"></div>
                     <p>{n}</p>
                     <br></br> 
-                    <div>Author: {data.comment}</div>
-                    <p>Comment:<br></br><br></br>  {data.author}</p>
+                    <div>Author: {data.author}</div>
+                    <p>Comment:<br></br><br></br>  {data.comment}</p>
                   </div>
                 );
                 })}
