@@ -5,11 +5,14 @@ import {sendJSONData} from "./../tools/Toolkit";
 import LoadingOverlay from "./../LoadingOverlay/LoadingOverlay";
 import ScrollView from '../ScrollImages/ScrollView';
 
-const SUBMIT_COMMENT = "https://www.seanmorrow.ca/_lessons/albumAddComment.php?id=w0436519";
-const RETRIEVE_SCRIPT:string = "https://www.seanmorrow.ca/_lessons/albumRetrieve.php?id=w0436519&count=11";
-const CommentView = ({photos,visible, count, comments, getJSONData, setPhotos, history, route}:SendComments):JSX.Element => {
-
+const SUBMIT_COMMENT:string = "https://www.seanmorrow.ca/_lessons/albumAddComment.php?id=w0436519";
+//const RETRIEVE_SCRIPT:string = "https://www.seanmorrow.ca/_lessons/albumRetrieve.php?id=w0436519&count=11";
+const CommentView = ({photos,visible, count, comments, getJSONData, setPhotos, history, route, RETRIEVE_SCRIPT}:SendComments):JSX.Element => {
 let sendString: any;
+// This components handles the comment submit.
+// On submittion of comment it will send to the url and receive and update the photos/comments
+
+//Send the comment to data base
 const commentSubmit = ():void => {
   setPanelState(false);
   sendString = {
@@ -21,6 +24,7 @@ const commentSubmit = ():void => {
   sendJSONData(SUBMIT_COMMENT, sendIT, fillComments, onError);
 }
 
+// States for loading overlay, authorSTR, commentSTR, panel state
 const [loadComment, setCommentLoading] = React.useState<boolean>(true);
 const [stateAuthor, setStateAuthor] = React.useState<string>("");
   const userAuthor = (e:any):void => {setStateAuthor(e.target.value);}
@@ -28,23 +32,28 @@ const [stateComment, setStateComment] = React.useState<string>("");
   const userComment = (e:any):void => {setStateComment(e.target.value);}
 const [panelState, setPanelState] = React.useState<boolean>(true);
 
+// Get the new json data and push the string to comments array
 const fillComments = ():void => {
   getJSONData(RETRIEVE_SCRIPT, onResponse, onError);
   comments.push(sendString);
 }
 
+// use effects for photos and getJSON function to check for changes
 React.useEffect(():void => {setPhotos(photos);})
 React.useEffect(():void => {getJSONData(RETRIEVE_SCRIPT, onResponse, onError);}, []);
 
+// Data recieved set the photos in setPhotos Func from App.tsx
 const onResponse = (result:PhotosData):void => {
   setCommentLoading(false);
   setPhotos(result.photos);
 }
 
+//Error
 const onError = (message:string):void => {
     setCommentLoading(true);
     console.log("*** Error has occured during AJAX data transmission: " + message)};
 
+//Cancel your comment set panel to false
 const commentCancel = ():void => {
   setPanelState(false);
 

@@ -2,6 +2,7 @@ import React from 'react';
 
 import './App.scss';
 import './Buttons.scss';
+
 import LoadingOverlay from "./LoadingOverlay/LoadingOverlay";
 import { getJSONData } from "./tools/Toolkit";
 import { PhotosData, Photo, ImageClicked } from './tools/Samples.model';
@@ -11,49 +12,35 @@ import ScrollView from './ScrollImages/ScrollView';
 import { Route, Switch } from "react-router-dom";
 import { useHistory, useLocation } from "react-router-dom";
 
+//url to send photos
 const SUBMIT_COMMENT:string = "https://www.seanmorrow.ca/_lessons/albumAddComment.php?id=w0436519";
+// URL to get photos
 const RETRIEVE_SCRIPT:string = "https://www.seanmorrow.ca/_lessons/albumRetrieve.php?id=w0436519&count=11";
 
 const App = ():JSX.Element => {
   
+  // json recieved, add it to photos
   const onResponse = (result:PhotosData):void => {
     setPhotos(result.photos);
-    console.log(result);
-    console.log(photos);
-    console.log("FROM APP VIEW");
     setLoading(false);
-    
   }
+
   const onError = (message:string):void => {
     setLoading(true);
     console.log("*** Error has occured during AJAX data transmission: " + message)};
 
+  // States of loading, photos, count for which photo we are on
   const [loading, setLoading] = React.useState<boolean>(true);
   const [photos, setPhotos] = React.useState<Photo[]>([]);
   const [count, setCount] = React.useState<number>(0);
-  //console.log("DEFAULT COUNT" + count);
+  
+  //Getting Json data
   React.useEffect(():void => {
     
     getJSONData(RETRIEVE_SCRIPT, onResponse, onError);
   }, []);
-  //console.log(photos);
-
-  /*const nextBtn = (e:any):void => {
-    let x:number = 0;
-    x = count;
-    ++x;
-    console.log("***********   NEXT BUTTON WAS CLICKED" + " " + count);
-    setCount(x);
-  }*/
-
-  /*const prevBtn = (e:any):void => {
-    let n:number = 0;
-    n = count;
-    --n;
-    console.log("***********   PREVIOUS BUTTON WAS CLICKED" + " " + count);
-    setCount(n);
-  }*/
-
+ 
+  //Next and previous buttons
   function nextBtn(){
     let x:number = 0;
     x = count;
@@ -69,11 +56,7 @@ const App = ():JSX.Element => {
     console.log("***********   PREVIOUS BUTTON WAS CLICKED" + " " + count);
     setCount(n);
   }
-
-  const focusBtn = (e:any):void => {
-
-  }
-
+// history for routing to display/ hide components
   const history:any = useHistory();
   const route:string = useLocation().pathname;
 
@@ -116,9 +99,10 @@ const App = ():JSX.Element => {
           <Route path="/"exact render={():JSX.Element =>
             <React.Fragment>
               <FocusView photos={photos} visible={false} setCount={setCount}></FocusView>
+
               <CommentView photos ={photos} visible={false} count={count}
                 comments={photos[count].comments} setPhotos={setPhotos}
-                  getJSONData={getJSONData} history={history} route={route}></CommentView>
+                  getJSONData={getJSONData} history={history} route={route} RETRIEVE_SCRIPT={RETRIEVE_SCRIPT}></CommentView>
               
             </React.Fragment>
           } />
@@ -127,9 +111,10 @@ const App = ():JSX.Element => {
             <React.Fragment>
               
               <FocusView photos={photos} visible={true} setCount={setCount}></FocusView>
+
               <CommentView photos ={photos} visible={false} count={count}
                 comments={photos[count].comments} setPhotos={setPhotos}
-                  getJSONData={getJSONData} history={history} route={route} ></CommentView>
+                  getJSONData={getJSONData} history={history} route={route} RETRIEVE_SCRIPT={RETRIEVE_SCRIPT}></CommentView>
             </React.Fragment>
           } />
 
@@ -137,7 +122,8 @@ const App = ():JSX.Element => {
               <React.Fragment>
               <CommentView photos ={photos} visible={true} count={count}
                 comments={photos[count].comments} setPhotos={setPhotos}
-                  getJSONData={getJSONData} history={history} route={route}></CommentView>
+                  getJSONData={getJSONData} history={history} route={route} RETRIEVE_SCRIPT={RETRIEVE_SCRIPT}></CommentView>\
+
               <FocusView photos={photos} visible={false} setCount={setCount} ></FocusView>
             </React.Fragment>
           } />
@@ -145,11 +131,6 @@ const App = ():JSX.Element => {
         </Switch>
         
         <ScrollView caption={photos[count].caption} comments={photos[count].comments} id={photos[count].id} title={photos[count].title} source={photos[count].source}></ScrollView>
-       
-
-
-
-
     </div>
 }</div>
   );
