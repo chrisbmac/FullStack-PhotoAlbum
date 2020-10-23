@@ -65,7 +65,7 @@ const App = ():JSX.Element => {
     <div>
       <LoadingOverlay bgColor="#035074" spinnerColor="#FFFFFF" enabled={loading} />
       {photos.length===0
-        ? <span>No orders retrieved...</span>
+        ? <span>No Photos retrieved...</span>
           
         :
 

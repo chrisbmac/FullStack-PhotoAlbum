@@ -12,8 +12,9 @@ let sendString: any;
 // This components handles the comment submit.
 // On submittion of comment it will send to the url and receive and update the photos/comments
 
-//Send the comment to data base
+//Send the comment to data base, enable loading overlay while updating comment section
 const commentSubmit = ():void => {
+  setCommentLoading(true);
   setPanelState(false);
   sendString = {
       "photoId": photos[count].id,
@@ -25,17 +26,18 @@ const commentSubmit = ():void => {
 }
 
 // States for loading overlay, authorSTR, commentSTR, panel state
-const [loadComment, setCommentLoading] = React.useState<boolean>(true);
+const [loadComment, setCommentLoading] = React.useState<boolean>(false);
 const [stateAuthor, setStateAuthor] = React.useState<string>("");
   const userAuthor = (e:any):void => {setStateAuthor(e.target.value);}
 const [stateComment, setStateComment] = React.useState<string>("");
   const userComment = (e:any):void => {setStateComment(e.target.value);}
 const [panelState, setPanelState] = React.useState<boolean>(true);
 
-// Get the new json data and push the string to comments array
+// Get the new json data and push the string to comments array, Once finished stop loading overlay
 const fillComments = ():void => {
   getJSONData(RETRIEVE_SCRIPT, onResponse, onError);
   comments.push(sendString);
+  setCommentLoading(false);
 }
 
 // use effects for photos and getJSON function to check for changes
@@ -44,7 +46,6 @@ React.useEffect(():void => {getJSONData(RETRIEVE_SCRIPT, onResponse, onError);},
 
 // Data recieved set the photos in setPhotos Func from App.tsx
 const onResponse = (result:PhotosData):void => {
-  setCommentLoading(false);
   setPhotos(result.photos);
 }
 
@@ -60,6 +61,7 @@ const commentCancel = ():void => {
 }
     return (
       <div>
+        <LoadingOverlay bgColor="#035074" spinnerColor="#FFFFFF" enabled={loadComment} />
         {
           (panelState == true)?
         
