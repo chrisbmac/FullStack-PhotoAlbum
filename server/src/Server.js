@@ -1,36 +1,43 @@
 let express = require("express");
 let cors = require('cors');
 let MongoClient = require("mongodb").MongoClient;
+
 let bodyParser = require("body-parser");
 let sanitizer = require("express-sanitizer");
 let ObjectId = require("mongodb").ObjectId;
 
-// MongoDB constants
 const URL = "mongodb://localhost:27017/";
 const DB_NAME = "dbPhotoAlbum";
 
-// construct application object via express
 let app = express();
-// add cors as middleware
-app.use(cors());
 
-// add body-parser / sanitizer as middleware
+app.use(cors());
 app.use(bodyParser.json());
 app.use(sanitizer());
-
-// express static middleware - setup static files location
 app.use("/", express.static('./build'));
 
 // ----------------------------------------- get
 app.get("/get", async (request, response) => {
-    // construct MongoClient object for working with MongoDB
-    let mongoClient = new MongoClient(URL, { useUnifiedTopology: true });
-    // Use connect method to connect to the server
+    let mongoClient = new MongoClient(URL, { useUnifiedTopology: true });    
     try {
         await mongoClient.connect(); 
-        // convert all documents in technologies collection into array in one awesome statement!
-        let techArray = await mongoClient.db(DB_NAME).collection("photos").find().sort("comments", -1).toArray();
-        let json = { "photos": techArray };
+        
+        //sort by newly added, 
+        //deconstruct array, 
+        //group the feilds to that _id, 
+        //return the values for that feild, push them into array
+        
+        let techArray = await mongoClient.db(DB_NAME).collection("photos").aggregate([{$unwind:"$comments"},
+        {$sort:{"comments": 1}},
+        {"$group" : {_id:"$_id", "title": {"$first": "$title"},
+        "caption": {"$first": "$caption"},
+        "source": {"$first": "$source"},
+        comments:{$push:"$comments"}
+        }}
+        ]).toArray();
+
+        // send it as json
+        let json = { "photos": techArray};
         
         response.status(200);
         response.send(json);
@@ -39,13 +46,43 @@ app.get("/get", async (request, response) => {
         response.send({error: error.message});
         throw error;
     } finally {
-        // close mongoClient (connection to MongoDB server)
         mongoClient.close();
     }
 });
-
+//--------------------------------------------------------Add a comment
+app.post("/addComment/:id/:author/:comment", async (request, response) => {
+    let mongoClient = new MongoClient(URL, { useUnifiedTopology: true });
+    try {
+        await mongoClient.connect(); 
+        
+        // the params that will be comment by user
+        let string = {author: "myname123", comment: "mycomment123"};
+        
+        // add the comment to db as string object
+        let result = await mongoClient.db(DB_NAME).collection("photos").updateOne(
+        { "_id": new ObjectId(request.sanitize(request.params.id)) }, 
+        { $push: { comments: request.body.comments = string}}
+        );
+        
+        if (JSON.parse(result).n <= 0) {
+            response.status(404);
+            response.send({error: "No documents found with ID"});
+            mongoClient.close();
+            return;
+        }
+        response.status(200);
+        response.send(result);     
+    } catch (error) {
+        response.status(500);
+        response.send({error: error.message});
+        throw error;
+    } finally {
+        mongoClient.close();
+    }
+});
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx Not using right now
 // ----------------------------------------- post add
-app.post("/post", async (request, response) => {
+/*app.post("/post", async (request, response) => {
     // construct MongoClient object for working with MongoDB
     let mongoClient = new MongoClient(URL, { useUnifiedTopology: true });
     // Use connect method to connect to the server
@@ -81,40 +118,6 @@ app.post("/post", async (request, response) => {
         throw error;
     } finally {
         // close mongoClient (connection to MongoDB server)
-        mongoClient.close();
-    }
-});
-app.post("/addComment/:id", async (request, response) => {
-    let mongoClient = new MongoClient(URL, { useUnifiedTopology: true });
-    try {
-        await mongoClient.connect(); 
-        let id = new ObjectId(request.sanitize(request.params.id));
-
-        /*request.body.title = request.sanitize(request.body.tile);
-        request.body.description = request.sanitize(request.body.description);
-        request.body.difficulty = request.sanitize(request.body.difficulty);*/
-        request.body.comments.forEach(comment => {
-            comment.author = request.sanitize(comment.author);
-            comment.comment = request.sanitize(comment.comment);
-        });
-        let selector = { "_id":id };
-        let newValues = { $push: {"comments": request.body.comments } };
-
-        let result = await mongoClient.db(DB_NAME).collection("photos").updateOne(selector, newValues);
-
-        if (JSON.parse(result).n <= 0) {
-            response.status(404);
-            response.send({error: "No technology documents found with ID"});
-            mongoClient.close();
-            return;
-        }
-        response.status(200);
-        response.send(result);     
-    } catch (error) {
-        response.status(500);
-        response.send({error: error.message});
-        throw error;
-    } finally {
         mongoClient.close();
     }
 });
@@ -188,6 +191,6 @@ app.delete("/delete/:id", async (request, response) => {
     } finally {
         mongoClient.close();
     }
-});
+});*/
 
 app.listen(8080, () => console.log("Listening on port 8080"));
