@@ -26,10 +26,12 @@ app.get("/get", async (request, response) => {
         //deconstruct array, 
         //group the feilds to that _id, 
         //return the values for that feild, push them into array
-        
-        let techArray = await mongoClient.db(DB_NAME).collection("photos").aggregate([{$unwind:"$comments"},
+        //let techArray = await mongoClient.db(DB_NAME).collection("photos").find().sort("title",1).toArray();
+
+        let techArray = await mongoClient.db(DB_NAME).collection("photos").aggregate([{"$unwind": {"path":"$comments","preserveNullAndEmptyArrays": true}},
         {$sort:{"comments": 1}},
-        {"$group" : {_id:"$_id", "title": {"$first": "$title"},
+        {"$group" : {_id:"$_id",
+        "title": {"$first": "$title"},
         "caption": {"$first": "$caption"},
         "source": {"$first": "$source"},
         comments:{$push:"$comments"}
@@ -56,8 +58,8 @@ app.post("/addComment/:id/:author/:comment", async (request, response) => {
         await mongoClient.connect(); 
         
         // the params that will be comment by user
-        let string = {author: "myname123", comment: "mycomment123"};
-        
+        let string = {id: request.params.id, author: request.params.author, comment: request.params.comment};
+        console.log("PARAMS From server: " + string);
         // add the comment to db as string object
         let result = await mongoClient.db(DB_NAME).collection("photos").updateOne(
         { "_id": new ObjectId(request.sanitize(request.params.id)) }, 

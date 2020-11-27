@@ -11,6 +11,7 @@ export interface Photo {
     caption: string;
     comments: Comments[];
     id: string;
+    _id: string;
     source: string;
     title: string;
 

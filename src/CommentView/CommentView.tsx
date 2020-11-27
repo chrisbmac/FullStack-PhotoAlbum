@@ -5,7 +5,8 @@ import {sendJSONData} from "./../tools/Toolkit";
 import LoadingOverlay from "./../LoadingOverlay/LoadingOverlay";
 import ScrollView from '../ScrollImages/ScrollView';
 
-const SUBMIT_COMMENT:string = "https://www.seanmorrow.ca/_lessons/albumAddComment.php?id=w0436519";
+//const SUBMIT_COMMENT:string = "https://www.seanmorrow.ca/_lessons/albumAddComment.php?id=w0436519";
+const SUBMIT_COMMENT:string = "http://localhost:8080/addComment/?id=&author=&limit=";
 //const RETRIEVE_SCRIPT:string = "https://www.seanmorrow.ca/_lessons/albumRetrieve.php?id=w0436519&count=11";
 const CommentView = ({photos,visible, count, comments, getJSONData, setPhotos, history, route, RETRIEVE_SCRIPT}:SendComments):JSX.Element => {
 let sendString: any;
@@ -17,10 +18,12 @@ const commentSubmit = ():void => {
   setCommentLoading(true);
   setPanelState(false);
   sendString = {
-      "photoId": photos[count].id,
+      "photoId": photos[count]._id,
       "author": stateAuthor,
       "comment": stateComment
   }
+  console.log(sendString);
+  console.log(photos[count]._id);
   let sendIT:string = JSON.stringify(sendString);
   sendJSONData(SUBMIT_COMMENT, sendIT, fillComments, onError);
 }

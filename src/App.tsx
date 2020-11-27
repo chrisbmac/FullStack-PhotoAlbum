@@ -13,10 +13,12 @@ import { Route, Switch } from "react-router-dom";
 import { useHistory, useLocation } from "react-router-dom";
 
 //url to send photos
+//http://localhost:8080/addComment/?id=&author&limit=
+//http://localhost:8080/get
 const SUBMIT_COMMENT:string = "https://www.seanmorrow.ca/_lessons/albumAddComment.php?id=w0436519";
 // URL to get photos
-const RETRIEVE_SCRIPT:string = "https://www.seanmorrow.ca/_lessons/albumRetrieve.php?id=w0436519&count=11";
-
+const RETRIEVE_SCRIPT:string = "http://localhost:8080/get";
+//const RETRIEVE_SCRIPT:string = "https://www.seanmorrow.ca/_lessons/retrieveAlbum.php?id=w0436519&count=11";
 const App = ():JSX.Element => {
   
   // json recieved, add it to photos
@@ -130,7 +132,7 @@ const App = ():JSX.Element => {
 
         </Switch>
         
-        <ScrollView caption={photos[count].caption} comments={photos[count].comments} id={photos[count].id} title={photos[count].title} source={photos[count].source}></ScrollView>
+        <ScrollView caption={photos[count].caption} comments={photos[count].comments} id={photos[count].id} title={photos[count].title} source={photos[count].source} _id={photos[count]._id}></ScrollView>
     </div>
 }</div>
   );

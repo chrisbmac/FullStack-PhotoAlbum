@@ -35,7 +35,7 @@ const [photoClicked, setPhotoClk] = useState<number>(0);
            );
          })}
           <div className="hideElement">
-            <ScrollView caption={photos[photoClicked].caption} comments={photos[photoClicked].comments} id={photos[photoClicked].id} title={photos[photoClicked].title} source={photos[photoClicked].source}></ScrollView>
+            <ScrollView caption={photos[photoClicked].caption} comments={photos[photoClicked].comments} id={photos[photoClicked].id} title={photos[photoClicked].title} source={photos[photoClicked].source} _id={photos[photoClicked]._id}></ScrollView>
           </div>
         </div>
 
